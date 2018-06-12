@@ -90,14 +90,24 @@ class MELCORdata:
             break
           match = re.match(regex, line)
           if match is not None:
-            functionValues[match.groupdict()["name"]] = match.groupdict()["value"]
+            if match.groupdict()["value"] == "T":
+              functionValues[match.groupdict()["name"]] = 1.0
+            elif match.groupdict()["value"] == "F":
+              functionValues[match.groupdict()["name"]] = 0.0
+            else:
+              functionValues[match.groupdict()["name"]] = match.groupdict()["value"]
       elif start == -2:
         for lineNumber, line in enumerate(listOfLines):
           fcnName = re.match(timeOneRegex_name, line)
           if fcnName is not None:
             fcnValue = re.match(timeOneRegex_value, listOfLines[lineNumber+1])
             if fcnValue is not None:
-              functionValues[fcnName.groupdict()["name"]] = fcnValue.groupdict()["value"]
+              if fcnValue.groupdict()["value"] == "T":
+                functionValues[fcnName.groupdict()["name"]] = 1.0
+              elif fcnValue.groupdict()["value"] == "F":
+                functionValues[fcnName.groupdict()["name"]] = 0.0
+              else:
+                functionValues[fcnName.groupdict()["name"]] = fcnValue.groupdict()["value"]
       functionValuesForEachTime[time] = functionValues
     return functionValuesForEachTime
 
